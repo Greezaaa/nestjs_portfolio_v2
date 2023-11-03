@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as FormData from 'form-data';
 import Mailgun from 'mailgun.js';
 import { SendedMailResponse } from './interfaces/sended-email-response.interface';
-import { generateConfirmationEmail } from './templates/confirm-email.template';
+import { templateConfirmationEmail } from './templates';
 
 
 
@@ -27,7 +27,7 @@ export class MailService {
     ): Promise<SendedMailResponse> {
 
         const subject = `no-reply: Email Confirmation Code | ${ process.env.DOMAIN }`;
-        const { text, html } = generateConfirmationEmail(confirmationCode, process.env.DOMAIN)
+        const { text, html } = templateConfirmationEmail(confirmationCode, process.env.DOMAIN)
         try {
             const fromAddress = `support <no-replay@${ process.env.MAILGUN_DOMAIN }>`;
             const messageData = {

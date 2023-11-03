@@ -8,7 +8,7 @@ import { SendedMailResponse } from './interfaces/sended-email-response.interface
 export class MailController {
   constructor(private readonly mailService: MailService) { }
 
-  //email sending route for one email address
+  //email with email confirmationCode must have a target email, subject, confirmationCode
   @Post('confirm')
   async sendEmail(@Body() sendEmailDto: ConfirmEmailDto): Promise<SendedMailResponse> {
     const {to, confirmationCode}  = sendEmailDto;

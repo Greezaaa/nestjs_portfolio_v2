@@ -1,4 +1,4 @@
-export function generateConfirmationEmail(confirmationCode: string, emailDomain: string): { text: string; html: string } {
+export function templateConfirmationEmail(confirmationCode: string, emailDomain: string): { text: string; html: string } {
     const text = `Please do not reply to this email. 
   Your confirmation code is: ${confirmationCode}
   
