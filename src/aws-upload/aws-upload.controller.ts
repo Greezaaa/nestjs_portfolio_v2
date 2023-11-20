@@ -6,7 +6,7 @@ import { Express } from 'express';
 import { AwsUploadService } from './aws-upload.service';
 import { Throttle } from '@nestjs/throttler';
 import { documentFileValidators, imageFileValidators } from './validators';
-
+import { Multer } from 'multer';
 @Controller('aws-upload')
 
 export class AwsUploadController {
@@ -20,13 +20,14 @@ export class AwsUploadController {
         @Throttle({ 'default': { limit: 2, ttl: 60 } })
         async uploadImage(
           @UploadedFile(new ParseFilePipe({ validators: imageFileValidators }))
-          file: Express.Multer.File,
+          file: Multer.File,
         ) {
         if (file.size > +this.configService.get<number>('FILE_SIZE_LIMIT_2MB') ?? 1024 * 1024) {
             throw new Error('File is too large');
         }
         // console.log(file);
-        await this.awsUploadService.UploadedImage(file.originalname, file.buffer);
+        const response = await this.awsUploadService.uploadImageTemporary(file.originalname, file.buffer);
+        return response
     }
 
     
@@ -34,12 +35,12 @@ export class AwsUploadController {
     @UseInterceptors(FileInterceptor('file'))
     async uploadDocument(
       @UploadedFile(new ParseFilePipe({ validators: documentFileValidators }))
-      file: Express.Multer.File,
+      file: Multer.File,
     ) {
         if (file.size > +this.configService.get<number>('FILE_SIZE_LIMIT_2MB') ?? 1024 * 1024) {
             throw new Error('File is too large');
         }
         // console.log(file);
-        await this.awsUploadService.UploadedDocument(file.originalname, file.buffer);
+        await this.awsUploadService.uploadedDocument(file.originalname, file.buffer);
     }
 }

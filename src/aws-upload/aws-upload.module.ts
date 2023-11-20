@@ -10,8 +10,3 @@ import { AwsUploadService } from './aws-upload.service';
   ],
 })
 export class AwsUploadModule { }
-
-
-
-
-
