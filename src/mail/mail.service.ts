@@ -38,7 +38,7 @@ export class MailService {
                 html: html,
             };
             const response = await this.mg.messages.create(process.env.MAILGUN_DOMAIN || 'greezaaa.es', messageData);
-            // console.log(response);
+            console.log(response);
 
             return {
                 status: response.status,
